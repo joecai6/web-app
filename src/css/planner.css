@@ -1,0 +1,55 @@
+input {
+  display: inline;
+  vertical-align:middle;
+  box-sizing:border-box;
+}
+
+.course-span {
+  display: inline-block;
+  border: solid 1px;
+  padding-top: 3px;
+  width: 200px;
+  height: 30px;
+}
+
+.course-input {
+  width: 200px;
+  height: 30px;
+}
+
+.course-unit {
+  background: aliceblue;
+  display:flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  border: solid 3px;
+  border-radius: 5px;
+  width: 300px;
+  height: 250px;
+  padding: 10px 0 10px 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-unit-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  
+  /* Temporary for edit button*/
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.course-year-wrapper {
+  background: lavender;
+  border: solid 3px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px 20px;
+}
+
+.window {
+
+}
