@@ -2,6 +2,7 @@ import React from 'react';
 import {Dropdown} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import "../css/planner.css";
+import { withRouter } from "react-router-dom";
 
 class CourseUnitItem extends React.Component {
   constructor(props){

@@ -1,29 +1,62 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User.js');
+var bcrypt = require('bcrypt');
+var passport = require('passport')
 
-router.route('/').get((req,res) => {
+const initializePassport = require('../passport.js');
+initializePassport(passport);
 
+function checkAuth(req, res, next){
+  console.log("checking auth");
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.json({redirect: '/login'});
+}
+
+function checkNotAuth(req, res, next){
+  if(req.isAuthenticated()){
+    return res.json({redirect: '/'});
+  }
+  next();
+}
+
+router.get('/', checkAuth, (req,res) => {
+  console.log(req.session);
+  res.send(req.user);
 })
 
-router.post('/login', (req,res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+router.get("/login", checkNotAuth, (req, res, next) => {
+  res.send('inital login load / not logged in yet');
+});
 
-  User.findOne({username: username}, (err, user) => {
-    if(err){
-      return res.status(400).json(err);
+router.post("/login", checkNotAuth, (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) res.send("No User Exists");
+    else {
+      req.logIn(user, (err) => {
+        if (err) throw err;
+        res.json({msg: "Successfully Authenticated", redirect: '/'});
+        console.log(req.user);
+      });
     }
-    if(!user){
-      return res.json("NO USER FOUND");
-    }
-    return res.status(200).json("USER FOUND");
-  })
+  })(req, res, next);
+});
+
+router.get('/logout', (req,res) => {
+  req.session.destroy((err) => res.json({redirect: '/login'}));
 })
 
-router.post('/register', (req,res) => {
+router.post('/register', async (req,res) => {
+  User.findOne({ username: req.body.username }, async (err, doc) => {
+    if (err) throw err;
+    if (doc) res.send("User Already Exists");
+  });
+
   const username = req.body.username;
-  const password = req.body.password;
+  const password = await bcrypt.hash(req.body.password, 10);
 
   const newUser = new User({
     username: username,
