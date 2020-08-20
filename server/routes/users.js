@@ -8,7 +8,6 @@ const initializePassport = require('../passport.js');
 initializePassport(passport);
 
 function checkAuth(req, res, next){
-  console.log("checking auth");
   if(req.isAuthenticated()){
     return next();
   }
@@ -39,7 +38,6 @@ router.post("/login", checkNotAuth, (req, res, next) => {
       req.logIn(user, (err) => {
         if (err) throw err;
         res.json({msg: "Successfully Authenticated", redirect: '/'});
-        console.log(req.user);
       });
     }
   })(req, res, next);
@@ -50,24 +48,30 @@ router.get('/logout', (req,res) => {
 })
 
 router.post('/register', async (req,res) => {
-  User.findOne({ username: req.body.username }, async (err, doc) => {
+  User.findOne({ username: req.body.username }, (err, doc) => {
     if (err) throw err;
     if (doc) res.send("User Already Exists");
   });
 
-  const username = req.body.username;
-  const password = await bcrypt.hash(req.body.password, 10);
+  let password = null;
+  try {
+    password = await bcrypt.hash(req.body.password, 10);
+  }
+  catch(e) {
+    console.log("cannot encrpty passpowrd");
+    throw(e);
+  }
 
   const newUser = new User({
-    username: username,
+    username: req.body.username,
     password: password,
-    firstname: "test",
-    lastname: "user"
+    firstname: req.body.firstname,
+    lastname: req.body.lastname
   });
 
   newUser.save()
     .then(() => {
-      res.json(`Added user`);
+      return res.json({msg: "Added user", redirect: "/login"});
     })
     .catch(err => res.status(400).json(err))
 })

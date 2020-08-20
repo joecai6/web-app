@@ -11,8 +11,8 @@ class Login extends React.Component {
     this.onClickLogin = this.onClickLogin.bind(this);
 
     this.state = {
-      username: "fake",
-      password: "user",
+      username: "",
+      password: "",
       loggedIn: false
     }
 

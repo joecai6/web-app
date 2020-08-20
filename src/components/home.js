@@ -34,7 +34,7 @@ function Home(props){
         Home
       </div>
       <div>
-        <div>{data ? <h1>Welcome Back {data.username}</h1> : null}</div>
+        <div>{data ? <h1>Welcome Back {data.firstname}!</h1> : null}</div>
       </div>
       <button onClick={handleLogOut}>Logout</button>
     </div>

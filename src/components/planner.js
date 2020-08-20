@@ -3,6 +3,7 @@ import {Dropdown} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import "../css/planner.css";
 import { withRouter } from "react-router-dom";
+import axios from 'axios';
 
 class CourseUnitItem extends React.Component {
   constructor(props){
@@ -13,17 +14,20 @@ class CourseUnitItem extends React.Component {
   }
 
   handleTextChange(event){
-    this.setState({value:event.target.value}, () => {
-      console.log(this.state.value);
-    })
+    this.props.handler(event, this.props.index);
+    this.setState({value:event.target.value});
   }
 
   render(){
-      let course = this.props.editing? 
-        <CourseUnitInput title="" value={this.state.value} placeholder={this.state.placeholder}
-          handleTextChange={this.handleTextChange}/>
-        :<span className="course-span form-control">&nbsp;{this.state.value}</span>;
-
+      let course;
+      if(this.props.editing)
+        course = <CourseUnitInput title={this.props.title} value={this.state.value} placeholder={this.state.placeholder}
+          handleTextChange={this.handleTextChange} />
+      else if(this.state.value !== "")
+        course = <span className="course-span form-control">&nbsp;{this.state.value}</span>;
+      else {
+        course = <div></div>
+      }
       return (
         <div className="div-wrap">
           {course}
@@ -40,7 +44,6 @@ class CourseUnitInput extends React.Component {
   render(){
     return (
       <div className="div-wrap">
-        <h3>{this.props.title}</h3>
         <input className="course-input form-control" value={this.props.value} onChange={this.props.handleTextChange} placeholder={this.props.placeholder}/>
       </div>
     );
@@ -52,20 +55,27 @@ class CourseUnitList extends React.Component {
     super(props);
 
     // set state to be the courses list
+    this.state = {
+      courses: this.props.courseList.courses, //object
+      value: "",
+      index: 0,
+      courseItems: []
+    }
+
+    this.handleTextChange = this.handleTextChange.bind(this);
+  }
+
+  handleTextChange(event, index){
+    this.props.updateYear(event, this.props.title, index);
+    this.setState({value:event.target.value})
   }
 
   render(){
     let current = [];
-    let remaining = [];
-    let remainingSize = this.props.courseList.courses ? 5 - this.props.courseList.courses.length : 5;
-    for(let i = 0; i < remainingSize; i++){
-      remaining.push(
-        <CourseUnitItem editing={this.props.editing} course=""/>
-      )
-    }
-    if(this.props.courseList.courses){
-      current = this.props.courseList.courses.map((item, index) => (
-        <CourseUnitItem editing={this.props.editing} course={item}/>
+    if(this.state.courses){
+      current = this.state.courses.map((item, index) => (
+        <CourseUnitItem index={index} editing={this.props.editing} title={this.props.title} 
+              handler={this.handleTextChange} course={item.name}/> 
       ))
     }
     return (
@@ -82,26 +92,58 @@ class CourseUnitList extends React.Component {
 class CourseYearList extends React.Component {
   constructor(props){
     super(props);
-
-    this.state = {editing: false};
+    axios.defaults.baseURL = 'http://localhost:5000/';
+    axios.defaults.withCredentials = true;
+    this.state = {
+      editing: false,
+      list: this.props.termList || []
+    };
     this.handleEditClick = this.handleEditClick.bind(this);
+    this.updateYearState = this.updateYearState.bind(this);
   }
   
+  postTerm = () => {
+    const data = {
+      term: this.state.list
+    }
+    axios.post('/plan/addTerm', data).then((res)=>{
+      console.log(res.data);
+    }
+    )
+  }
+
   handleEditClick(){
     this.setState((prevState) => (
       {editing: !prevState.editing}
-    ));
+    ),()=>{
+      if(!this.state.editing){
+        this.postTerm();
+      }
+    })
+  }
+  
+  updateYearState(event, title, index) {
+    if(this.state.editing){
+      let term = this.state.list.find((obj) => obj.title == title);
+      if(term){
+        if(term.courses[index]){
+          term.courses[index].name = event.target.value;
+        }
+      }
+    }
   }
 
   render(){
-    let list = this.props.termList || {};
     return (
       <div className="course-year-wrapper">
         <h2>{this.props.title  + " " + this.props.year}</h2>
         <div className="course-unit-wrapper">
-            <CourseUnitList editing={this.state.editing} title="Fall" courseList={list.fall || {}}/>
-            <CourseUnitList editing={this.state.editing} title="Winter" courseList={list.winter || {}}/>
-            <CourseUnitList editing={this.state.editing} title="Summer"courseList={list.spring || {}} />
+            <CourseUnitList editing={this.state.editing} title="fall" 
+              updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
+            <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
+              updateYear={this.updateYearState}/>
+            <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
+              updateYear={this.updateYearState}/>
         </div>
         <button className="btn-primary" onClick={this.handleEditClick}>Edit</button>
 
@@ -111,15 +153,66 @@ class CourseYearList extends React.Component {
 }
 
 class Planner extends React.Component {
+  constructor(props){
+    super(props);
+    axios.defaults.baseURL = 'http://localhost:5000/';
+    axios.defaults.withCredentials = true;
+    this.state = {
+      msg: "",
+      term: [
+        {title:"fall", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
+      ],
+      isLoading: true
+    }
+    this.onChangeMsg = this.onChangeMsg.bind(this);
+    this.postMsg = this.postMsg.bind(this);
+    this.getUser();
+    this.getPlan();
+  }
+
+  getPlan = () => {
+    axios.get('/plan/').then((res)=>{
+      if(res.data.success === 1){
+        this.setState({term: res.data.term});
+      }
+      this.setState({isLoading: false});
+    })
+  }
+
+  getUser = () => {
+    axios.get('/users/').then((res) => {
+      if(res.data.redirect === '/login'){
+        this.props.history.push('/login');
+      }
+    });
+  }
+  
+  postMsg = () => {
+    const data = {
+      msg: this.state.msg,
+      term: this.state.term
+    }
+    axios.post('/plan/add', data).then((res) => {
+      console.log(res.data);
+    })
+
+    this.setState({
+      msg: ''
+    })
+  }
+
+  onChangeMsg(event){
+    this.setState({
+      msg: event.target.value
+    })
+  }
 
   render(){  
-    let termList = {
-      first: {
-        fall: {courses:["CSE 100"]}, 
-        winter: {courses:["asdasda", "asdasda", "sdadsa"]},
-        spring: {courses:["CSE 100"]}
-      }
-    };
+    if(this.state.isLoading){
+      return <div><h1>LOADING</h1></div>
+    }
     return (
       <div className="window">
         <div className="jumbotron">
@@ -135,10 +228,11 @@ class Planner extends React.Component {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-
-        <CourseYearList title="Freshman Year" year={2020} termList={termList.first}/>
-        <CourseYearList title="Sophmore Year" year={2020} termList={termList.second || {}}/>
-        <CourseYearList title="Junior Year" year={2020} termList={termList.third || {}}/>
+        <CourseYearList title="Freshman Year" year={2020} termList={this.state.term}/>
+        <CourseYearList title="Sophmore Year" year={2020} termList={[]}/>
+        <CourseYearList title="Junior Year" year={2020} termList={[]}/>
+        <textarea value={this.state.msg} onChange={this.onChangeMsg}></textarea>
+        <button onClick={this.postMsg}>Save</button>
       </div>
     );
   }
