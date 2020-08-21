@@ -96,7 +96,8 @@ class CourseYearList extends React.Component {
     axios.defaults.withCredentials = true;
     this.state = {
       editing: false,
-      list: this.props.termList || []
+      list: this.props.termList || [],
+      year: this.props.title
     };
     this.handleEditClick = this.handleEditClick.bind(this);
     this.updateYearState = this.updateYearState.bind(this);
@@ -104,7 +105,8 @@ class CourseYearList extends React.Component {
   
   postTerm = () => {
     const data = {
-      term: this.state.list
+      term: this.state.list,
+      termName: this.state.year
     }
     axios.post('/plan/addTerm', data).then((res)=>{
       console.log(res.data);
@@ -159,7 +161,17 @@ class Planner extends React.Component {
     axios.defaults.withCredentials = true;
     this.state = {
       msg: "",
-      term: [
+      firstYear: [
+        {title:"fall", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
+      ],
+      secondYear: [
+        {title:"fall", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
+      ],
+      thirdYear:[
         {title:"fall", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
         {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
         {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
@@ -175,7 +187,8 @@ class Planner extends React.Component {
   getPlan = () => {
     axios.get('/plan/').then((res)=>{
       if(res.data.success === 1){
-        this.setState({term: res.data.term});
+        console.log(res.data);
+        this.setState({firstYear: res.data.term});
       }
       this.setState({isLoading: false});
     })
@@ -190,17 +203,7 @@ class Planner extends React.Component {
   }
   
   postMsg = () => {
-    const data = {
-      msg: this.state.msg,
-      term: this.state.term
-    }
-    axios.post('/plan/add', data).then((res) => {
-      console.log(res.data);
-    })
 
-    this.setState({
-      msg: ''
-    })
   }
 
   onChangeMsg(event){
@@ -228,9 +231,9 @@ class Planner extends React.Component {
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <CourseYearList title="Freshman Year" year={2020} termList={this.state.term}/>
-        <CourseYearList title="Sophmore Year" year={2020} termList={[]}/>
-        <CourseYearList title="Junior Year" year={2020} termList={[]}/>
+        <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
+        <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
+        <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
         <textarea value={this.state.msg} onChange={this.onChangeMsg}></textarea>
         <button onClick={this.postMsg}>Save</button>
       </div>

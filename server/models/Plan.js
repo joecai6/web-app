@@ -5,7 +5,8 @@ const planSchema = new Schema({
   userId: String,
   username: String,
   message: String,
-  yearTerms: [{ title: String,
+  year: String,
+  terms: [{ title: String,
           courses: [{
             name: String,
             units: Number,
@@ -14,7 +15,7 @@ const planSchema = new Schema({
           }],
           _id: false
         }]
-}, {timestamps: true})
+}, {timestamps: false})
 
 //make a separate schemas for all years
 module.exports = mongoose.model('Plan', planSchema);
