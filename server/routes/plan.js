@@ -19,10 +19,15 @@ router.get('/', (req, res) => {
 
 router.post('/addPlan', (req,res) => {
   console.log(req.body.years);
+})
 
-
-    
-
+router.get('/allTerms', (req, res) => {
+  Plan.find({userId: req.user.id}, (err, docs) => {
+    if(err) return err;
+    if(docs){
+      res.send(docs);
+    }
+  })
 })
 
 router.post('/addTerm', (req, res) => {

@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
+import '../css/login.css';
+import logo from '../css/imgs/logoplacer.jpeg';
 
 class Login extends React.Component {
   constructor(props){
@@ -72,17 +74,30 @@ class Login extends React.Component {
         return <div></div>
     }
     return (
-      <div>
-        <div className="h3">Login</div>
-        <div>
-          <div>Username</div>
-          <input type="text" value={this.state.username} onChange={this.onChangeUser}></input>
-          <div>Password</div>
-          <input type="text" value={this.state.password} onChange={this.onChangePassword}></input>
+      <div className="container login-background d-flex justify-content-center align-items-center">
+        <div className="bg-white login-wrapper shadow-lg">
+          <div className="login-left">
+           <img src={logo} alt="LOGO" width="200" height="200" />
+           <h1>CourseMap</h1>
+            <div className="login-left-text">
+              <p>A revolutionary way to plan your journey through college. Create a plan, Track your progress, and Develop your goal.</p>
+            </div>
+          </div>
+          <div className="login-right row no-gutters">
+            <div className="col d-flex flex-column justify-content-center align-items-center slide-out">
+              <div className="h2 mb-4">Sign In</div>
+              <div>
+                <div className="">Username</div>
+                <input className="login-input form-control my-2" type="text" value={this.state.username} onChange={this.onChangeUser}></input>
+                <div>Password</div>
+                <input className="login-input form-control my-2" type="text" value={this.state.password} onChange={this.onChangePassword}></input>
+              </div>
+              <button id="login-button" className="btn btn-primary btn-dark m-3" onClick={this.onClickLogin}>Login</button>
+              <a href="/register">Register</a>
+            </div>
+            <div id="register">Create an Account</div>
+          </div>
         </div>
-        <button onClick={this.onClickLogin}>Login</button>
-        <a href="/register">Register</a>
-        <Already />
       </div>
     )
   }

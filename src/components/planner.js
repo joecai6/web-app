@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import "../css/planner.css";
 import { withRouter } from "react-router-dom";
 import axios from 'axios';
+import Header from './header';
 
 class CourseUnitItem extends React.Component {
   constructor(props){
@@ -182,16 +183,27 @@ class Planner extends React.Component {
     this.postMsg = this.postMsg.bind(this);
     this.getUser();
     this.getPlan();
+    this.getTerms();
+  }
+
+  getTerms = () => {
+    axios.get('/plan/allTerms').then((res)=>{
+      res.data.forEach((yearTerm) => {
+        if(yearTerm.year == "freshman"){
+          this.setState({firstYear: yearTerm.terms});
+        }
+        else if(yearTerm.year == "sophmore"){
+          this.setState({secondYear: yearTerm.terms});
+        }
+        else if(yearTerm.year == "junior"){
+          this.setState({thirdYear: yearTerm.terms});
+        }
+      })
+      this.setState({isLoading: false});
+    })
   }
 
   getPlan = () => {
-    axios.get('/plan/').then((res)=>{
-      if(res.data.success === 1){
-        console.log(res.data);
-        this.setState({firstYear: res.data.term});
-      }
-      this.setState({isLoading: false});
-    })
   }
 
   getUser = () => {
@@ -218,6 +230,7 @@ class Planner extends React.Component {
     }
     return (
       <div className="window">
+        <Header />
         <div className="jumbotron">
           <h1>Four Year Plan</h1>
         </div>

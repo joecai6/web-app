@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
+import Header from './header';
 
 function Home(props){
   const [data, setData] = useState(null);
@@ -30,6 +31,7 @@ function Home(props){
 
   return (
     <div>
+      <Header />
       <div className="jumbotron">
         Home
       </div>
