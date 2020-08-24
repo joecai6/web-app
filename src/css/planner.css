@@ -5,9 +5,13 @@ input {
   box-sizing:border-box;
 }
 
+.border-1 {
+  border: solid 2px;
+}
+
 .course-span {
-  display: inline-block;
-  border: solid 1px;
+  background: aliceblue;
+  border-radius: 0;
   padding-top: 3px;
   width: 200px;
   height: 30px;
@@ -25,8 +29,7 @@ input {
   display:flex;
   flex-direction: column;
   flex-wrap: wrap;
-  border: solid 3px;
-  border-radius: 5px;
+  border: solid 1px;
   width: 300px;
   height: 250px;
   padding: 10px 0 10px 0;
@@ -37,24 +40,30 @@ input {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  
-  /* Temporary for edit button*/
-  margin-top: 10px;
-  margin-bottom: 10px;
+  border: solid 2px;
 }
 
 .course-year-wrapper {
-  background: lavender;
-  border: solid 3px;
-  border-radius: 5px;
+  border: solid 2px;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 20px 20px;
+  background-color: aquamarine;
+}
+
+.year-title {
+  background-color: rgb(125, 170, 230);
+  padding: 0.5em 0 0.5em 0.5em;
+  border-bottom: solid 2px;
 }
 
 .course-unit-text {
 }
 
 .window {
+  background-color: rgb(222, 232, 235);
+  padding-bottom: 1em;
+}
 
+.title-bar {
+  border: solid 2px;
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { withRouter } from "react-router-dom";
 import '../css/login.css';
 import logo from '../css/imgs/logoplacer.jpeg';
+import Register from './register';
 
 class Login extends React.Component {
   constructor(props){
@@ -11,11 +12,14 @@ class Login extends React.Component {
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onClickLogin = this.onClickLogin.bind(this);
-
+    this.onClickLoginReg = this.onClickLoginReg.bind(this);
+    this.onClickRegister = this.onClickRegister.bind(this);
     this.state = {
       username: "",
       password: "",
-      loggedIn: false
+      loggedIn: false,
+      registerClicked: false,
+      loginClicked: false
     }
 
     this.checkLoggedIn();
@@ -66,6 +70,18 @@ class Login extends React.Component {
     this.login(user);
   }
 
+  onClickLoginReg(){
+    this.setState({loginClicked: !this.state.loginClicked}, ()=>{
+      console.log(this.state.loginClicked);
+    });
+    this.setState({registerClicked: false})
+  }
+
+  onClickRegister() {
+    this.setState({loginClicked: false});
+    this.setState({registerClicked: !this.state.registerClicked})
+  }
+
   render(){
     let Already= () => {
       if(this.state.loggedIn)
@@ -77,27 +93,33 @@ class Login extends React.Component {
       <div className="container login-background d-flex justify-content-center align-items-center">
         <div className="bg-white login-wrapper shadow-lg">
           <div className="login-left">
-           <img src={logo} alt="LOGO" width="200" height="200" />
+           <img className="visible" src={logo} alt="LOGO" width="200" height="200" />
            <h1>CourseMap</h1>
             <div className="login-left-text">
-              <p>A revolutionary way to plan your journey through college. Create a plan, Track your progress, and Develop your goal.</p>
+              <p>A productive tool to plan your journey through college. Create a plan, Track your progress, and Develop your goal.</p>
             </div>
           </div>
           <div className="login-right row no-gutters">
-            <div className="col d-flex flex-column justify-content-center align-items-center slide-out">
+            <div className={`col d-flex flex-column justify-content-center align-items-center 
+                            ${this.state.registerClicked ? "login-slide-out" : ""} ${this.state.loginClicked ? "login-slide-in" : ""}`}>
               <div className="h2 mb-4">Sign In</div>
-              <div>
+              <div className="">
                 <div className="">Username</div>
                 <input className="login-input form-control my-2" type="text" value={this.state.username} onChange={this.onChangeUser}></input>
                 <div>Password</div>
                 <input className="login-input form-control my-2" type="text" value={this.state.password} onChange={this.onChangePassword}></input>
               </div>
-              <button id="login-button" className="btn btn-primary btn-dark m-3" onClick={this.onClickLogin}>Login</button>
-              <a href="/register">Register</a>
+                <button id="login-button" className="btn btn-primary btn-dark m-3" onClick={this.onClickLogin}>Login</button>
+                <button onClick={this.onClickRegister}>Register</button>
             </div>
-            <div id="register">Create an Account</div>
           </div>
         </div>
+          <div className={`d-flex flex-column justify-content-center align-items-center 
+                          register right hide ${this.state.registerClicked ? "register-slide-in" : ""}
+                          ${this.state.loginClicked ? "register-slide-out" : ""}`}>
+              <Register />
+              <button onClick={this.onClickLoginReg}>Login</button>
+          </div>
       </div>
     )
   }

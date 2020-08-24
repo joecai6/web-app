@@ -79,24 +79,25 @@ class Register extends React.Component {
       firstname: '',
       lastname: ''
     })
+
+    window.location.reload(false);
   }
 
   render(){
     return (
-      <div>
-        <div className="h3">Create a new user</div>
+      <div className="d-flex flex-column justify-content-center align-items-center">
+        <div className="h2 mb-4">Create a new user</div>
         <div>
           <div>Username</div>
-          <input type="text" value={this.state.username} onChange={(e) => this.onChangeForm(e, 'username')}></input>
+          <input className="form-control my-1" type="text" value={this.state.username} onChange={(e) => this.onChangeForm(e, 'username')}></input>
           <div>Password</div>
-          <input type="text" value={this.state.password} onChange={(e) => this.onChangeForm(e, 'password')}></input>
+          <input className="form-control my-1" type="text" value={this.state.password} onChange={(e) => this.onChangeForm(e, 'password')}></input>
           <div>First Name</div>
-          <input type="text" value={this.state.firstname} onChange={(e) => this.onChangeForm(e, 'first')}></input>
+          <input className="form-control my-1" type="text" value={this.state.firstname} onChange={(e) => this.onChangeForm(e, 'first')}></input>
           <div>Last Name</div>
-          <input type="text" value={this.state.lastname} onChange={(e) => this.onChangeForm(e, 'last')}></input>
+          <input className="form-control my-1" type="text" value={this.state.lastname} onChange={(e) => this.onChangeForm(e, 'last')}></input>
         </div>
-        <button onClick={this.onClick}>Register</button>
-        <a href='/login'>Back to login</a>
+        <button className="btn btn-primary btn-dark m-3" onClick={this.onClick}>Register</button>
       </div>
     )
   }

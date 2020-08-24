@@ -6,6 +6,20 @@ import { withRouter } from "react-router-dom";
 import axios from 'axios';
 import Header from './header';
 
+class CourseUnitInput extends React.Component {
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return (
+      <div className="div-wrap">
+        <input className="course-input form-control" value={this.props.value} onChange={this.props.handleTextChange} placeholder={this.props.placeholder}/>
+      </div>
+    );
+  }
+}
+
 class CourseUnitItem extends React.Component {
   constructor(props){
     super(props);
@@ -34,20 +48,6 @@ class CourseUnitItem extends React.Component {
           {course}
         </div>
       );
-  }
-}
-
-class CourseUnitInput extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return (
-      <div className="div-wrap">
-        <input className="course-input form-control" value={this.props.value} onChange={this.props.handleTextChange} placeholder={this.props.placeholder}/>
-      </div>
-    );
   }
 }
 
@@ -80,7 +80,7 @@ class CourseUnitList extends React.Component {
       ))
     }
     return (
-      <div>
+      <div className="mb-3">
         <div className="course-unit-text">{this.props.title}</div>      
         <div className="course-unit">
           {current}
@@ -138,17 +138,23 @@ class CourseYearList extends React.Component {
 
   render(){
     return (
-      <div className="course-year-wrapper">
-        <h2>{this.props.title  + " " + this.props.year}</h2>
-        <div className="course-unit-wrapper">
-            <CourseUnitList editing={this.state.editing} title="fall" 
-              updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
-            <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
-              updateYear={this.updateYearState}/>
-            <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
-              updateYear={this.updateYearState}/>
+      <div className="course-year-wrapper container">
+        <h2 className="year-title row">{this.props.title  + " " + this.props.year}</h2>
+        <div className="row bg-white">
+          <div className="col border-1">
+              <CourseUnitList editing={this.state.editing} title="fall" 
+                updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
+          </div>
+          <div className="col border-1">
+              <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
+                updateYear={this.updateYearState}/>
+          </div>
+          <div className="col border-1">
+              <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
+                updateYear={this.updateYearState}/>
+          </div>
         </div>
-        <button className="btn-primary" onClick={this.handleEditClick}>Edit</button>
+        <button className="btn-primary my-2" onClick={this.handleEditClick}>Edit</button>
 
       </div>
     );
@@ -177,6 +183,11 @@ class Planner extends React.Component {
         {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
         {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
       ],
+      forthYear:[
+        {title:"fall", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
+        {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
+      ],
       isLoading: true
     }
     this.onChangeMsg = this.onChangeMsg.bind(this);
@@ -197,6 +208,9 @@ class Planner extends React.Component {
         }
         else if(yearTerm.year == "junior"){
           this.setState({thirdYear: yearTerm.terms});
+        }
+        else if(yearTerm.year == "senior"){
+          this.setState({forthYear: yearTerm.terms});
         }
       })
       this.setState({isLoading: false});
@@ -229,26 +243,20 @@ class Planner extends React.Component {
       return <div><h1>LOADING</h1></div>
     }
     return (
-      <div className="window">
-        <Header />
-        <div className="jumbotron">
-          <h1>Four Year Plan</h1>
+      <div className="container-fluid window ">
+        <div className="container">
+          <Header />
+          <div className="jumbotron title-bar shadow-lg">
+            <h1 className="display-5">Academic Plan</h1>
+            <div className="lead mt-4">Plan the courses for a complete map of the path you are going to take in your desired college experience.</div>
+            </div>
+            <div className="container">
+              <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
+              <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
+              <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
+              <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>
+            </div>
         </div>
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Test Dropdown
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <CourseYearList />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
-        <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
-        <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
-        <textarea value={this.state.msg} onChange={this.onChangeMsg}></textarea>
-        <button onClick={this.postMsg}>Save</button>
       </div>
     );
   }

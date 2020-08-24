@@ -47,19 +47,78 @@
 }
 
 #register {
-  display: none;
+  background-color: aliceblue;
+}
+
+.right {
+  position: absolute;
+  right: 0;
+}
+
+.hide {
   visibility: hidden;
 }
 
-.slide-out {
+.login-slide-out {
   animation-name: slide-out;
-  animation-duration: 3s;
-  animation-delay: 3s;
-  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+  animation-iteration-count:1;
+}
+
+.login-slide-in {
+  left: 0;
+  animation-name: login-slide-in;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+  animation-iteration-count:1;
+}
+
+.register-slide-in {
+  visibility: visible;
+  opacity: 0;
+  animation-name: slide-in;
+  animation-fill-mode: forwards;
+  animation-duration: 1.5s;
+  animation-iteration-count: 1;
+}
+
+.register-slide-out {
+  visibility: visible;
+  opacity: 1;
+  animation-name: register-slide-out;
+  animation-fill-mode: forwards;
+  animation-duration: 1.5s;
+  animation-iteration-count: 1;
 }
 
 @keyframes slide-out {
   0% { transform: translateX(0%); }
-  30% { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
+}
+
+@keyframes register-slide-out {
+  0% {  transform: translateX(-27vw); }
+  35% {opacity: 0;}
+  100% { transform: translateX(0vw); opacity: 0;}
+}
+
+@keyframes login-slide-in {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes slide-in {
+  0% {  transform: translateX(0vw); }
+  35% {opacity: 0;}
+  100% { transform: translateX(-27vw); opacity: 1;}
+}
+
+@keyframes fade-in {
+  50% {
+    opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
 }
