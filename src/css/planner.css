@@ -30,16 +30,14 @@ input {
   flex-direction: column;
   flex-wrap: wrap;
   border: solid 1px;
-  width: 300px;
   height: 250px;
-  padding: 10px 0 10px 0;
+  padding: 10px;
   align-items: center;
 }
 
 .course-unit-wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   border: solid 2px;
 }
 
@@ -66,4 +64,18 @@ input {
 
 .title-bar {
   border: solid 2px;
+}
+
+.fade-in {
+  display: block;
+  animation: slide-down 2s ease-out;
+}
+
+.fade-out {
+  display: none;
+}
+
+@keyframes slide-down {
+  0% { opacity: 0; transform: translateY(-100%); }   
+100% { opacity: 1; transform: translateY(0%); }
 }

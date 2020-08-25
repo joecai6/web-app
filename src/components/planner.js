@@ -80,9 +80,9 @@ class CourseUnitList extends React.Component {
       ))
     }
     return (
-      <div className="mb-3">
-        <div className="course-unit-text">{this.props.title}</div>      
-        <div className="course-unit">
+      <div className="m-3 bg-info">
+        <div className="course-unit-text pt-2 pl-2 h5">{this.props.title}</div>      
+        <div className="course-unit w-100">
           {current}
         </div>
       </div>
@@ -139,17 +139,19 @@ class CourseYearList extends React.Component {
   render(){
     return (
       <div className="course-year-wrapper container">
-        <h2 className="year-title row">{this.props.title  + " " + this.props.year}</h2>
+        <div className="row">
+          <h2 className="year-title w-100">{this.props.title  + " " + this.props.year}</h2>
+        </div>
         <div className="row bg-white">
-          <div className="col border-1">
+          <div className="col border-1 m-3">
               <CourseUnitList editing={this.state.editing} title="fall" 
                 updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
           </div>
-          <div className="col border-1">
+          <div className="col border-1 m-3">
               <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
                 updateYear={this.updateYearState}/>
           </div>
-          <div className="col border-1">
+          <div className="col border-1 m-3">
               <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
                 updateYear={this.updateYearState}/>
           </div>
@@ -188,10 +190,12 @@ class Planner extends React.Component {
         {title:"winter", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]},
         {title:"spring", courses: [{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""},{name:"",units:0,desc:""}]}
       ],
-      isLoading: true
+      isLoading: true,
+      classDropdown:"fade-out"
     }
     this.onChangeMsg = this.onChangeMsg.bind(this);
     this.postMsg = this.postMsg.bind(this);
+    this.onClickDropdown = this.onClickDropdown.bind(this);
     this.getUser();
     this.getPlan();
     this.getTerms();
@@ -238,24 +242,35 @@ class Planner extends React.Component {
     })
   }
 
+  onClickDropdown() {
+    let toggle = this.state.classDropdown === "fade-out" ? "fade-in" : "fade-out";
+    this.setState({classDropdown: toggle});
+  }
+
   render(){  
     if(this.state.isLoading){
       return <div><h1>LOADING</h1></div>
     }
     return (
-      <div className="container-fluid window ">
+      <div className="container-fluid window">
         <div className="container">
           <Header />
           <div className="jumbotron title-bar shadow-lg">
             <h1 className="display-5">Academic Plan</h1>
             <div className="lead mt-4">Plan the courses for a complete map of the path you are going to take in your desired college experience.</div>
+          </div>
+          <div className="">
+            <button className="btn btn-secondary" onClick={this.onClickDropdown}>Dropdown</button>
+            <div className="overflow-hidden">
+              <div className={`${this.state.classDropdown}`}><CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/></div>
             </div>
-            <div className="container">
-              <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
-              <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
-              <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
-              <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>
-            </div>
+          </div>
+          <div className="container">
+            <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
+            <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
+            <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
+            <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>
+          </div>
         </div>
       </div>
     );
