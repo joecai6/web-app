@@ -98,10 +98,13 @@ class CourseYearList extends React.Component {
     this.state = {
       editing: false,
       list: this.props.termList || [],
-      year: this.props.title
+      year: this.props.title,
+      classDropdown: "fade-out"
     };
+
     this.handleEditClick = this.handleEditClick.bind(this);
     this.updateYearState = this.updateYearState.bind(this);
+    this.onHeaderClick = this.onHeaderClick.bind(this);
   }
   
   postTerm = () => {
@@ -136,24 +139,34 @@ class CourseYearList extends React.Component {
     }
   }
 
+  onHeaderClick() {
+    
+    let toggle = this.state.classDropdown === "fade-out" ? "fade-in" : "fade-out";
+    this.setState({classDropdown: toggle}, () => console.log(this.state.classDropdown));
+  }
+
   render(){
     return (
-      <div className="course-year-wrapper container">
-        <div className="row">
+      <div className="course-year-wrapper container overflow-hidden">
+        <span className="row button bg-danger" onClick={this.onHeaderClick}>
           <h2 className="year-title w-100">{this.props.title  + " " + this.props.year}</h2>
-        </div>
-        <div className="row bg-white">
-          <div className="col border-1 m-3">
-              <CourseUnitList editing={this.state.editing} title="fall" 
-                updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
-          </div>
-          <div className="col border-1 m-3">
-              <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
-                updateYear={this.updateYearState}/>
-          </div>
-          <div className="col border-1 m-3">
-              <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
-                updateYear={this.updateYearState}/>
+        </span>
+        <div className="overflow-hidden">
+          <div className={`${this.state.classDropdown}`}>
+            <div className={`row bg-white`}>
+              <div className="col border-1 m-3">
+                  <CourseUnitList editing={this.state.editing} title="fall" 
+                    updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
+              </div>
+              <div className="col border-1 m-3">
+                  <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
+                    updateYear={this.updateYearState}/>
+              </div>
+              <div className="col border-1 m-3">
+                  <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
+                    updateYear={this.updateYearState}/>
+              </div>
+            </div>
           </div>
         </div>
         <button className="btn-primary my-2" onClick={this.handleEditClick}>Edit</button>
@@ -259,14 +272,15 @@ class Planner extends React.Component {
             <h1 className="display-5">Academic Plan</h1>
             <div className="lead mt-4">Plan the courses for a complete map of the path you are going to take in your desired college experience.</div>
           </div>
-          <div className="">
+          <div className="container">
             <button className="btn btn-secondary" onClick={this.onClickDropdown}>Dropdown</button>
             <div className="overflow-hidden">
-              <div className={`${this.state.classDropdown}`}><CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/></div>
+              <div className={`${this.state.classDropdown}`}><div>HELLO</div></div>
             </div>
           </div>
+
           <div className="container">
-            <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
+          <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
             <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
             <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
             <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>

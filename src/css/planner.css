@@ -67,15 +67,41 @@ input {
 }
 
 .fade-in {
+  position: relative;
   display: block;
-  animation: slide-down 2s ease-out;
+  z-index: 1;
+  animation: slide-down 0.5s, height-up 0.5s;
+  animation-fill-mode: forwards;
 }
 
 .fade-out {
-  display: none;
+  position: relative;
+  z-index: -1;
+  animation: slide-up 0.5s, height-down 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.height-lower {
+  animation: height 1s ease-out;
+  animation-fill-mode: forwards;
 }
 
 @keyframes slide-down {
-  0% { opacity: 0; transform: translateY(-100%); }   
+  0% { opacity: 0; transform: translateY(-600px); }   
 100% { opacity: 1; transform: translateY(0%); }
+}
+
+@keyframes slide-up {
+  0% { opacity: 1; transform: translateY(0%);}    
+100% { opacity: 1; transform: translateY(-600px);}
+}
+
+@keyframes height-down {
+  0% {max-height: 600px;}    
+  100% { max-height: 0px;}
+}
+
+@keyframes height-up {
+  0% {max-height: 0px;}    
+  100% { max-height: 600px;}
 }
