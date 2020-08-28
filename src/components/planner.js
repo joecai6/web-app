@@ -38,8 +38,10 @@ class CourseUnitItem extends React.Component {
       if(this.props.editing)
         course = <CourseUnitInput title={this.props.title} value={this.state.value} placeholder={this.state.placeholder}
           handleTextChange={this.handleTextChange} />
-      else if(this.state.value !== "")
-        course = <span className="course-span form-control">&nbsp;{this.state.value}</span>;
+      else if(!this.props.editing)
+        course = <span className="row w-100 course-span form-control pl-2">&nbsp;
+          <div className="">{this.state.value}</div>
+        </span>;
       else {
         course = <div></div>
       }
@@ -73,16 +75,24 @@ class CourseUnitList extends React.Component {
 
   render(){
     let current = [];
+    let emptyItems = [];
     if(this.state.courses){
       current = this.state.courses.map((item, index) => (
         <CourseUnitItem index={index} editing={this.props.editing} title={this.props.title} 
               handler={this.handleTextChange} course={item.name}/> 
       ))
+      
+      /* Hard code the remaining empty spans */
+      for(let i = 0; i < 5 - this.state.courses.length; i++){
+        emptyItems.push(<CourseUnitItem index={i + 5 - this.state.courses.length} editing={this.props.editing} title={this.props.title} 
+          handler={this.handleTextChange} course={"sdasd"}/> )
+      }
     }
+
     return (
-      <div className="m-3 bg-info">
-        <div className="course-unit-text pt-2 pl-2 h5">{this.props.title}</div>      
-        <div className="course-unit w-100">
+      <div className="my-1">
+        <div className="w-100 course-unit-text h5 border-1 m-0 p-2 pl-2">{this.props.title}</div>      
+        <div className="w-100 course-unit">
           {current}
         </div>
       </div>
@@ -147,30 +157,29 @@ class CourseYearList extends React.Component {
 
   render(){
     return (
-      <div className="course-year-wrapper container overflow-hidden">
+      <div className="course-year-wrapper container overflow-hidden my-3">
         <span className="row button bg-danger" onClick={this.onHeaderClick}>
-          <h2 className="year-title w-100">{this.props.title  + " " + this.props.year}</h2>
+          <div className="year-title w-100 p-2 m-0 h5">{this.props.title  + " " + this.props.year}</div>
         </span>
         <div className="overflow-hidden">
           <div className={`${this.state.classDropdown}`}>
-            <div className={`row bg-white`}>
-              <div className="col border-1 m-3">
+            <div className={`row`}>
+              <div className="col m-3">
                   <CourseUnitList editing={this.state.editing} title="fall" 
                     updateYear={this.updateYearState} courseList={this.state.list[0] || {}}/>
               </div>
-              <div className="col border-1 m-3">
+              <div className="col m-3">
                   <CourseUnitList editing={this.state.editing} title="winter" courseList={this.state.list[1] || {}}
                     updateYear={this.updateYearState}/>
               </div>
-              <div className="col border-1 m-3">
+              <div className="col m-3">
                   <CourseUnitList editing={this.state.editing} title="spring"courseList={this.state.list[2] || {}}
                     updateYear={this.updateYearState}/>
               </div>
             </div>
+            <button className="btn btn-dark mb-3 ml-3" onClick={this.handleEditClick}>Edit</button>
           </div>
         </div>
-        <button className="btn-primary my-2" onClick={this.handleEditClick}>Edit</button>
-
       </div>
     );
   }
@@ -265,27 +274,31 @@ class Planner extends React.Component {
       return <div><h1>LOADING</h1></div>
     }
     return (
-      <div className="container-fluid window">
-        <div className="container">
-          <Header />
-          <div className="jumbotron title-bar shadow-lg">
-            <h1 className="display-5">Academic Plan</h1>
-            <div className="lead mt-4">Plan the courses for a complete map of the path you are going to take in your desired college experience.</div>
+      <div>
+      <Header />
+      <div className="container-fluid p-0">
+        <div className="">
+          <div className="title-bar pl-5">
+            <h1 className="h3">Academic Plan</h1>
+            <div className="my-2">Plan the courses for a complete map of the path you are going to take in your desired college experience.</div>
           </div>
-          <div className="container">
-            <button className="btn btn-secondary" onClick={this.onClickDropdown}>Dropdown</button>
-            <div className="overflow-hidden">
-              <div className={`${this.state.classDropdown}`}><div>HELLO</div></div>
+          <div className="container bg-white py-4">
+            <div className="jumbotron border-1">
+              <div>
+                <h3>Profile infomation here</h3>
+                <p>School. Major. Total units. GPA. Timestamp (Last Updated). Start/End Year. 
+                <br></br> Courses Link. Current Standing. Print button.</p>
+              </div>
+            </div>
+            <div className="course-window">
+              <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
+              <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
+              <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
+              <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>
             </div>
           </div>
-
-          <div className="container">
-          <CourseYearList title="freshman" year={2020} termList={this.state.firstYear}/>
-            <CourseYearList title="sophmore" year={2020} termList={this.state.secondYear}/>
-            <CourseYearList title="junior" year={2020} termList={this.state.thirdYear}/>
-            <CourseYearList title="senior" year={2020} termList={this.state.forthYear}/>
-          </div>
         </div>
+      </div>
       </div>
     );
   }

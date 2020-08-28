@@ -66,7 +66,7 @@ router.post('/register', async (req,res) => {
     username: req.body.username,
     password: password,
     firstname: req.body.firstname,
-    lastname: req.body.lastname
+    lastname: req.body.lastname,
   });
 
   newUser.save()
@@ -74,6 +74,21 @@ router.post('/register', async (req,res) => {
       return res.json({msg: "Added user", redirect: "/login"});
     })
     .catch(err => res.status(400).json(err))
+})
+
+router.post('/update', (req,res)=>{
+  let user = {username: req.user.username};
+  let data = {
+    school: req.body.school,
+    major: req.body.major,
+    start: req.body.start,
+    end: req.body.end
+  }
+
+  User.findOneAndUpdate(user, data, {upsert: true}, (err, doc)=>{
+    if (err) return res.send(500, {error: err});
+    return res.send('Succesfully saved.');
+  })
 })
 
 module.exports = router;
