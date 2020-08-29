@@ -105,15 +105,6 @@ function Home(props){
     getUser();
   }, []);
 
-  const handleLogOut = () => {
-    axios.get("http://localhost:5000/users/logout", {withCredentials: true}).then((res) => {
-      if(res.data.redirect === '/login'){
-        props.history.push('/login');
-      }
-      console.log(res.data);
-    });
-  }
-
   return (
     <div className="container-fluid p-0 overflow-hidden">
       <Header />
@@ -121,7 +112,6 @@ function Home(props){
         <div className="h3">Welcome to CourseMap!
           <div className="pt-3 h6">Map out and track through your plan.</div>
         </div>
-        <button onClick={handleLogOut}>Logout</button>
       </div>
       <div className="row">
           <div className="home-panel col-7 ml-auto mb-5 shadow-lg">
@@ -175,7 +165,7 @@ function Home(props){
               Many students do not follow a four year academic plan, so CourseMap provides a platform for students to engage
               with their academic courses while being well aware of the path they forsake.<br></br><br></br>
               The goal of this app is to assist users in assuring that they will graduate on time and be prepared with
-              the courses they will take next term. Coursemap is a simple web application that allow users to easily create
+              the courses they will take next term. Coursemap is a convienent application that allow users to easily create
               a four year plan, instead of creating it by themselves through excel or downloading a template. There are many helpful features
               users can incorpate in forming their plan, such as downloading their plan into a printable pdf, autofilling their courses, etc.
               CourseMap also provides a progress bar to track the amount of units needed for graduation and the overall GPA.
