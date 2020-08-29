@@ -118,18 +118,20 @@ function Home(props){
     <div className="container-fluid p-0 overflow-hidden">
       <Header />
       <div className="home-banner d-flex align-items-center p-5 justify-content-between mb-4">
-        <div className="h3">Welcome to CourseMap.</div>
+        <div className="h3">Welcome to CourseMap!
+          <div className="pt-3 h6">Map out and track through your plan.</div>
+        </div>
         <button onClick={handleLogOut}>Logout</button>
       </div>
       <div className="row">
-          <div className="home-panel col-7 ml-auto mb-5">
+          <div className="home-panel col-7 ml-auto mb-5 shadow-lg">
             <div className="d-flex m-3">{data ? <h4>Hi, {data.firstname}!</h4> : null}
               <div className="h4 mx-5">Here is your profile.</div>
               <button className="btn btn-secondary my-0 ml-auto" onClick={handleShow}>
                 Update
               </button>
             </div>
-            <div className="bg-info d-flex flex-column justify-content-center">
+            <div className="d-flex flex-column justify-content-center">
               <div className="row">
                 <div className="col mb-2">
                   <div>{data ? <div><b>School:</b> {data.school}</div> : <div>not inputed</div>}</div>
@@ -146,22 +148,40 @@ function Home(props){
                 <div className="col-6 mb-2">
                   <div>{data ? <div><b>Graduating In:</b> {data.end}</div> : <div>not inputed</div>}</div>
                 </div>
+                <div className="col-12">[PROGRESS BAR UNTIL GRADUATION]</div>
               </div>
             </div>
           </div>
-          <div className="home-panel col-4 mx-auto">
+          <div className="home-panel col-4 mx-auto shadow-lg">
             <div className="h4 m-3">Planner</div>
-            <div className="bg-info">
-              <div>Gpa, Total UNits,
-                 needed to graduate
-                 date
-              </div>
+            <div className="">
+              <div className="mb-2"><b>Last Updated:</b> {new Date().toLocaleString()}</div>
+              <div className="mb-2"><b>Total Units:</b></div>
+              <div className="mb-2"><b>GPA:</b></div>
+              <div className="mb-2"><b>Units until graduation:</b></div>
             </div>
           </div>
       </div>
       <Profile show={show} handleClose={handleClose} user={data}/>
-      <div className="bg-warning vh-100">
-        
+      <div className="home-info-window mb-5 bg-warning row p-0">
+        <div className="col-6 bg-info info-background">
+          <div className=""></div>
+        </div>
+        <div className="col-6 info-text-bg">
+          <div className="m-5">
+            <div className="mb-4 h4">What is CourseMap?</div>
+            <div>
+              CourseMap is a long term planner for college students to keep track of throughout their academic experience.
+              Many students do not follow a four year academic plan, so CourseMap provides a platform for students to engage
+              with their academic courses while being well aware of the path they forsake.<br></br><br></br>
+              The goal of this app is to assist users in assuring that they will graduate on time and be prepared with
+              the courses they will take next term. Coursemap is a simple web application that allow users to easily create
+              a four year plan, instead of creating it by themselves through excel or downloading a template. There are many helpful features
+              users can incorpate in forming their plan, such as downloading their plan into a printable pdf, autofilling their courses, etc.
+              CourseMap also provides a progress bar to track the amount of units needed for graduation and the overall GPA.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

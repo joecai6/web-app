@@ -61,7 +61,7 @@ input, span {
   flex-direction: column;
   justify-content: center;
   height: 10rem;
-  background-color: rgb(125, 170, 230);
+  background-color: #5692eb;
 }
 
 .fade-in {

@@ -1,11 +1,25 @@
 .home-banner {
   height: 10rem;
-  border-radius: 5px;
-  background-color: #3ca0a0;
+  background-color: #5692eb;
 }
 
 .home-panel {
   height: 15rem;
   border-radius: 5px;
-  background-color: #3ca0a0;
+  border: solid 2px rgb(187, 187, 187);
+  background-color: rgb(255, 255, 255)
+}
+
+.home-info-window {
+  height: 75vh;
+}
+
+.info-background {
+  background-image: url(./imgs/homeinfo.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.info-text-bg {
+  background-color: rgb(236, 246, 255);
 }
