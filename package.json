@@ -11,6 +11,7 @@
     "bootstrap": "4.5.0",
     "express-flash": "0.0.2",
     "express-session": "1.17.1",
+    "jest": "26.4.2",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
     "react": "^16.13.1",
@@ -23,9 +24,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "./node_modules/.bin/jest --watch ./src/test",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": ["server", "src"]
   },
   "eslintConfig": {
     "extends": "react-app"
