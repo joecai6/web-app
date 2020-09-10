@@ -17,7 +17,6 @@ function Header(props){
   }
 
   return(
-    <>
     <Navbar className="nav-bg">
       <Navbar.Brand>
         <img
@@ -33,7 +32,6 @@ function Header(props){
       <Nav.Link href="/planner">Planner</Nav.Link>
       <Nav.Link className="ml-auto" onClick={handleLogOut}>Logout</Nav.Link>
     </Navbar>
-    </>
   );
 }
 
