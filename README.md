@@ -1,4 +1,5 @@
 # CourseMap
+[![Build Status](https://travis-ci.org/joecai6/web-app.svg?branch=master)](https://travis-ci.org/joecai6/web-app)
 
 What is CourseMap?
 CourseMap is a long term planner for college students to keep track of throughout their academic experience. Many students do not follow a four year academic plan, so CourseMap provides a platform for students to engage with their academic courses while being well aware of the path they forsake.
