@@ -1,5 +1,5 @@
 # CourseMap
-[![Build Status](https://travis-ci.org/joecai6/web-app.svg?branch=master)](https://travis-ci.org/joecai6/web-app)
+[![Build Status](https://travis-ci.org/joecai6/web-app.svg?branch=master)](https://travis-ci.org/joecai6/web-app)]
 [![Npm version](https://img.shields.io/npm/v/npm)]
 
 What is CourseMap?
